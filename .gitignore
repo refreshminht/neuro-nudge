@@ -1,0 +1,13 @@
+# Python environments
+.venv/
+.venv-py314-backup/
+
+# Temporary files
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+
+# Datasets and trained weights
+data/
+checkpoints/
