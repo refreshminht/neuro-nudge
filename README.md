@@ -4,9 +4,7 @@ Final project for Neuro240: Biological and Artificial Intelligence at Harvard, F
 
 ## Project Overview
 
-Our project investigates whether neural networks trained on EEG recorded during actual left- and right-hand movements can also classify imagined left- and right-hand movements without additional training.
-
-We will compare CNN and LSTM models using the same data splits and evaluation metrics.
+Our project investigates whether neural networks trained on EEG recorded during actual left- and right-hand movements can also classify imagined left- and right-hand movements without additional training. We will compare CNN and LSTM models using the same data splits and evaluation metrics.
 
 **Research question:** Can neural networks trained on actual motor execution generalize to motor imagery without additional training, and how does this generalization differ between CNN and LSTM architectures?
 
