@@ -45,6 +45,64 @@ def preprocess_run(participant, run, condition):
         event_id={"T1": 1, "T2": 2}
     )
 
+
+    # Collect the left/right task annotations.
+    task_annotations = [
+        annotation
+        for annotation in raw.annotations
+        if annotation["description"] in ("T1", "T2")
+    ]
+
+    assert len(task_annotations) == len(events)
+
+    sfreq = raw.info["sfreq"]
+    rows = []
+
+    for annotation, event in zip(task_annotations, events):
+        # Sample positions relative to the start of the recording.
+        cue_sample = int(event[0])
+        cue_index = cue_sample - raw.first_samp
+
+        # Match the sample window used by our epoch extraction.
+        start_sample = cue_index + round(0.5 * sfreq)
+        last_sample = cue_index + round(3.5 * sfreq) - 1
+
+        duration = float(annotation["duration"])
+        within_task = duration >= 3.5
+        within_recording = (
+            start_sample >= 0
+            and last_sample < raw.n_times
+        )
+
+        rows.append({
+            "participant": participant,
+            "run": run,
+            "condition": condition,
+            "cue_sample": cue_sample,
+            "hand": "left" if event[2] == 1 else "right",
+            "task_duration_s": duration,
+            "within_task": within_task,
+            "within_recording": within_recording,
+            "window_fits": within_task and within_recording,
+        })
+
+    window_report = pd.DataFrame(rows)
+
+    report_dir = PROJECT_DIR / "results" / "quality"
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    report_path = report_dir / (
+        f"S{participant:03d}R{run:02d}_window_checks.csv"
+    )
+
+    window_report.to_csv(report_path, index=False)
+
+    print("Window report saved to:", report_path)
+    print("All windows fit:", window_report["window_fits"].all())
+
+    if not window_report["window_fits"].all():
+        raise ValueError(f"A trial window does not fit in {file_path}")
+
     for annotation in raw.annotations:
         if (
             annotation["description"] in ("T1", "T2")
