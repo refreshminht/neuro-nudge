@@ -11,7 +11,7 @@ DATA_DIR = PROJECT_DIR / "data" / "files"
 OUTPUT_DIR = PROJECT_DIR / "data" / "processed"
 
 # Start with participant 1.
-PARTICIPANT = 1
+PARTICIPANTS =[1, 2, 3, 4, 5]
 
 RUNS = {
     3: "execution",
@@ -137,47 +137,52 @@ def preprocess_run(participant, run, condition):
     return X, y, metadata, epochs.ch_names
 
 
-all_X = []
-all_y = []
-all_metadata = []
-channel_names = None
-
-for run, condition in RUNS.items():
-    X, y, metadata, channels = preprocess_run(
-        PARTICIPANT, run, condition
-    )
-
-    # Both models need the same electrodes in the same order.
-    if channel_names is None:
-        channel_names = channels
-    elif channels != channel_names:
-        raise ValueError(f"Channel order differs in run {run}")
-
-    all_X.append(X)
-    all_y.append(y)
-    all_metadata.append(metadata)
-
-# Join runs while keeping signals, labels, and metadata aligned.
-X = np.concatenate(all_X, axis=0)
-y = np.concatenate(all_y, axis=0)
-metadata = pd.concat(all_metadata, ignore_index=True)
-
-assert len(X) == len(y) == len(metadata)
-assert X.shape[1:] == (64, 480)
-assert np.isfinite(X).all()
-
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-np.savez_compressed(
-    OUTPUT_DIR / "S001_trials.npz",
-    X=X,
-    y=y,
-    channel_names=np.array(channel_names),
-    sfreq=160
-)
+for participant in PARTICIPANTS:
+    all_X = []
+    all_y = []
+    all_metadata = []
+    channel_names = None
 
-metadata.to_csv(OUTPUT_DIR / "S001_metadata.csv", index=False)
+    for run, condition in RUNS.items():
+        X, y, metadata, channels = preprocess_run(
+            participant, run, condition
+        )
 
-print("Combined shape:", X.shape)
-print(metadata.groupby(["condition", "run", "hand"]).size())
-print("Saved to:", OUTPUT_DIR)
+        if channel_names is None:
+            channel_names = channels
+        elif channels != channel_names:
+            raise ValueError(
+                f"Channel order differs for participant {participant}, run {run}"
+            )
+
+        all_X.append(X)
+        all_y.append(y)
+        all_metadata.append(metadata)
+
+    X = np.concatenate(all_X, axis=0)
+    y = np.concatenate(all_y, axis=0)
+    metadata = pd.concat(all_metadata, ignore_index=True)
+
+    assert len(X) == len(y) == len(metadata)
+    assert X.shape[1:] == (64, 480)
+    assert np.isfinite(X).all()
+
+    participant_id = f"S{participant:03d}"
+
+    np.savez_compressed(
+        OUTPUT_DIR / f"{participant_id}_trials.npz",
+        X=X,
+        y=y,
+        channel_names=np.array(channel_names),
+        sfreq=160
+    )
+
+    metadata.to_csv(
+        OUTPUT_DIR / f"{participant_id}_metadata.csv",
+        index=False
+    )
+
+    print(f"\n{participant_id}: {X.shape}")
+    print(metadata.groupby(["condition", "run", "hand"]).size())
