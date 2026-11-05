@@ -110,6 +110,7 @@ def summarize_participant(trial_path):
     timing = windows.groupby(run_keys).agg(
         annotated_tasks=("cue_sample", "size"),
         min_task_duration_s=("task_duration_s", "min"),
+        median_task_duration_s=("task_duration_s", "median"),
         max_task_duration_s=("task_duration_s", "max"),
         windows_passed=("window_fits", "sum"),
     )
