@@ -1,13 +1,26 @@
-# Python environments
+# Python
 .venv/
-.venv-py314-backup/
-
-# Temporary files
+venv/
 __pycache__/
-*.pyc
-.ipynb_checkpoints/
-.DS_Store
+.pytest_cache/
 
-# Datasets and trained weights
-data/
-checkpoints/
+# EEG datasets
+data/raw/
+*.edf
+*.npz
+
+# Generated outputs
+outputs/
+outputs_3s/
+outputs_2p5s/
+
+# Audit results
+results/preprocessing_audit/
+results/report_figures/
+
+# Downloaded package duplicates
+eeg_preprocessing_package/
+neuro240_preprocessing_v2/
+neuro240_review_addon/
+NEURO240_Clean_Figures_and_Code/
+neuro240_publication_figures/
