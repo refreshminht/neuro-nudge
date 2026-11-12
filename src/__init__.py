@@ -1,0 +1,1 @@
+"""EEGBCI preprocessing and diagnostics."""
