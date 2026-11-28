@@ -1,0 +1,52 @@
+{
+  "model": "EEGLSTM",
+  "data_dir": "outputs_3s_20",
+  "checkpoint_epoch": 34,
+  "class_names": [
+    "Left fist",
+    "Right fist"
+  ],
+  "execution": {
+    "n_trials": 300,
+    "accuracy": 0.5433333333333333,
+    "balanced_accuracy": 0.5450847005468854,
+    "left_recall": 0.45751633986928103,
+    "right_recall": 0.6326530612244898,
+    "confusion_matrix": [
+      [
+        70,
+        83
+      ],
+      [
+        54,
+        93
+      ]
+    ],
+    "predicted_counts": {
+      "left": 124,
+      "right": 176
+    }
+  },
+  "imagery": {
+    "n_trials": 900,
+    "accuracy": 0.5533333333333333,
+    "balanced_accuracy": 0.5545375972342265,
+    "left_recall": 0.4461538461538462,
+    "right_recall": 0.6629213483146067,
+    "confusion_matrix": [
+      [
+        203,
+        252
+      ],
+      [
+        150,
+        295
+      ]
+    ],
+    "predicted_counts": {
+      "left": 353,
+      "right": 547
+    }
+  },
+  "transfer_gap": -0.009452896687341061
+}

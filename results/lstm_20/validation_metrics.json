@@ -1,0 +1,28 @@
+{
+  "model": "EEGLSTM",
+  "data_dir": "outputs_3s_20",
+  "checkpoint_epoch": 34,
+  "epochs_run": 44,
+  "val_loss": 0.6697450637817383,
+  "validation": {
+    "n_trials": 300,
+    "accuracy": 0.6,
+    "balanced_accuracy": 0.6,
+    "left_recall": 0.5333333333333333,
+    "right_recall": 0.6666666666666666,
+    "confusion_matrix": [
+      [
+        80,
+        70
+      ],
+      [
+        50,
+        100
+      ]
+    ],
+    "predicted_counts": {
+      "left": 130,
+      "right": 170
+    }
+  }
+}
